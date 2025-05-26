@@ -33,7 +33,7 @@ void dfs(int j, int n, int a[][10]) {
     s[j] = 1;
     int i;
     for (i = 0; i < n; i++) {
-        if (a[j][i] == 1 & s[i] == 0) {
+        if (a[j][i] == 1 && s[i] == 0) {
             dfs(i, n, a);
         }
     }

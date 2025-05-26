@@ -1,75 +1,51 @@
-#include<stdio.h>
+#include <stdio.h>
 
-int cost[10][10], n, t[10][2], sum;
-void prims(int cost[10][10], int n);
+#define INF 999
 
 int main() {
-    int i, j;
+    int cost[10][10], visited[10] = {0}, n, i, j;
+    int minCost = 0;
+    int edgeCount = 0;
 
     printf("Enter the number of vertices: ");
     scanf("%d", &n);
 
-    printf("Enter the cost adjacency matrix:\n");
-    for (i = 0; i < n; i++) {
-        for (j = 0; j < n; j++) {
+    printf("Enter the cost adjacency matrix (enter 999 for no edge):\n");
+    for(i = 0; i < n; i++) {
+        for(j = 0; j < n; j++) {
             scanf("%d", &cost[i][j]);
         }
     }
 
-    prims(cost, n);
+    visited[0] = 1; // Start from the first vertex
 
-    printf("Edges of the minimal spanning tree:\n");
-    for (i = 0; i < n - 1; i++) {
-        printf("(%d, %d) ", t[i][0], t[i][1]);
-    }
+    printf("Edges in the Minimum Spanning Tree:\n");
 
-    printf("\nSum of minimal spanning tree: %d\n", sum);
+    while(edgeCount < n - 1) {
+        int min = INF;
+        int u = -1, v = -1;
 
-    return 0;
-}
-
-void prims(int cost[10][10], int n) {
-    int i, j, u, v;
-    int min, source;
-    int p[10], d[10], s[10];
-
-    min = 999;
-    source = 0;
-
-    for (i = 0; i < n; i++) {
-        d[i] = cost[source][i];
-        s[i] = 0;
-        p[i] = source;
-    }
-
-    s[source] = 1;
-    sum = 0;
-    int k = 0;
-
-    for (i = 0; i < n - 1; i++) {
-        min = 999;
-        u = -1;
-
-        for (j = 0; j < n; j++) {
-            if (s[j] == 0 && d[j] < min) {
-                min = d[j];
-                u = j;
-            }
-        }
-
-        if (u != -1) {
-            t[k][0] = u;
-            t[k][1] = p[u];
-            k++;
-            sum += cost[u][p[u]];
-            s[u] = 1;
-
-            for (v = 0; v < n; v++) {
-                if (s[v] == 0 && cost[u][v] < d[v]) {
-                    d[v] = cost[u][v];
-                    p[v] = u;
+        for(i = 0; i < n; i++) {
+            if(visited[i]) {
+                for(j = 0; j < n; j++) {
+                    if(!visited[j] && cost[i][j] < min) {
+                        min = cost[i][j];
+                        u = i;
+                        v = j;
+                    }
                 }
             }
         }
+
+        if(u != -1 && v != -1) {
+            printf("(%d, %d) = %d\n", u, v, cost[u][v]);
+            visited[v] = 1;
+            minCost += cost[u][v];
+            edgeCount++;
+        }
     }
+
+    printf("Total cost of MST = %d\n", minCost);
+
+    return 0;
 }

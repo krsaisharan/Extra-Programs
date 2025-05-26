@@ -1,55 +1,60 @@
-#include<stdio.h>
+#include <stdio.h>
 
-void main() {
-    int i, j, n, v, k, min, u, c[20][20], s[20], d[20];
+#define INF 999
 
-    printf("\n Enter the no. of vertices : ");
+int main() {
+    int n, cost[10][10], distance[10], visited[10];
+    int i, j, u, min, src;
+
+    printf("Enter number of vertices: ");
     scanf("%d", &n);
 
-    printf("\n Enter the cost adjacency matrix : ");
-    printf("\n Enter 999 for no edge ");
-
-    for(i = 1; i <= n; i++) {
-        for(j = 1; j <= n; j++) {
-            scanf("%d", &c[i][j]);
+    printf("Enter the cost adjacency matrix (999 for no edge):\n");
+    for(i = 0; i < n; i++) {
+        for(j = 0; j < n; j++) {
+            scanf("%d", &cost[i][j]);
         }
     }
 
-    printf("\n Enter the source vertex : ");
-    scanf("%d", &v);
+    printf("Enter the source vertex (0 to %d): ", n - 1);
+    scanf("%d", &src);
 
-    for(i = 1; i <= n; i++) {
-        s[i] = 0;
-        d[i] = c[v][i];
+    // Initialize distances and visited array
+    for(i = 0; i < n; i++) {
+        distance[i] = cost[src][i];
+        visited[i] = 0;
     }
 
-    d[v] = 0;
-    s[v] = 1;
+    distance[src] = 0;
+    visited[src] = 1;
 
-    for(k = 2; k <= n; k++) {
-        min = 999;
+    for(i = 1; i < n; i++) {
+        min = INF;
+        u = -1;
 
-        for(i = 1; i <= n; i++) {
-            if((s[i] == 0) && (d[i] < min)) {
-                min = d[i];
-                u = i;
+        // Find the unvisited node with the smallest distance
+        for(j = 0; j < n; j++) {
+            if(!visited[j] && distance[j] < min) {
+                min = distance[j];
+                u = j;
             }
         }
 
-        s[u] = 1;
+        visited[u] = 1;
 
-        for(i = 1; i <= n; i++) {
-            if(s[i] == 0) {
-                if(d[i] > (d[u] + c[u][i])) {
-                    d[i] = d[u] + c[u][i];
-                }
+        // Update distances of neighbors of u
+        for(j = 0; j < n; j++) {
+            if(!visited[j] && distance[u] + cost[u][j] < distance[j]) {
+                distance[j] = distance[u] + cost[u][j];
             }
         }
     }
 
-    printf("\n The shortest distance from %d is ", v);
-
-    for(i = 1; i <= n; i++) {
-        printf("\n %d --> %d = %d ", v, i, d[i]);
+    // Output shortest distances
+    printf("\nShortest distances from vertex %d:\n", src);
+    for(i = 0; i < n; i++) {
+        printf("To %d: %d\n", i, distance[i]);
     }
+
+    return 0;
 }

@@ -4,7 +4,6 @@ int i, j, n, c, w[10], p[10], v[10][10];
 
 void knapsack(int n, int w[10], int p[10], int c){
     int max(int, int);
-
     for(i = 0; i <= n; i++){
         for(j = 0; j <= c; j++){
             if(i == 0 || j == 0)

@@ -26,9 +26,7 @@ void path(){
         if(p[i][k]==1 && p[k][j]==1){
             p[i][j]=1;
             }
-        }
-    }
-}
+        }}}
 }
 
 void read_data(){
